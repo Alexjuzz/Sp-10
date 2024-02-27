@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,6 @@ public class TaskService {
     private TaskRepository repository;
     @Autowired
     private UserRepository userRepository;
-
 
     private TaskResponse castTaskToTaskResponse(Task task){
         TaskResponse response = new TaskResponse();
@@ -49,7 +49,9 @@ public class TaskService {
     }
 
     public Optional<TaskResponse> deleteById(Long id) {
-       return repository.findById(id).map(this::castTaskToTaskResponse);
+        Optional<TaskResponse> taskResponse =   repository.findById(id).map(this::castTaskToTaskResponse);
+        repository.deleteById(taskResponse.get().getId());
+        return taskResponse;
     }
 
     public TaskResponse addUserToTask(Long task_id, Long user_id){
@@ -57,6 +59,15 @@ public class TaskService {
         User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setTask(task);
         task.getUserList().add(user);
+        repository.save(task);
+        return castTaskToTaskResponse(task);
+    }
+
+    public TaskResponse deleteUserFromTusk(Long task_id, Long user_id){
+        Task task = repository.findById(task_id).orElseThrow(()-> new RuntimeException("Not found task"));
+        User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setTask(null);
+        task.getUserList().remove(user);
         repository.save(task);
         return castTaskToTaskResponse(task);
     }

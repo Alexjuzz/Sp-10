@@ -26,4 +26,9 @@ public class User {
     @JsonBackReference
     private Task task;
 
+    public static User ofName(String name) {
+        User u  = new User();
+        u.setName(name);
+        return u;
+    }
 }

@@ -37,6 +37,10 @@ public class TaskController {
     public ResponseEntity<TaskResponse> putUser(@PathVariable("task_id") Long task_id,@PathVariable() Long user_id){
         return new ResponseEntity<>(service.addUserToTask(task_id,user_id),HttpStatus.ACCEPTED);
     }
+    @DeleteMapping("/del/{task_id}/user_id/{user_id}")
+    public ResponseEntity<TaskResponse> delUser(@PathVariable("task_id") Long task_id,@PathVariable() Long user_id){
+        return new ResponseEntity<>(service.deleteUserFromTusk(task_id,user_id),HttpStatus.ACCEPTED);
+    }
 
     @DeleteMapping("/del/{id}")
     public ResponseEntity<TaskResponse> deleteById(@PathVariable Long id){
