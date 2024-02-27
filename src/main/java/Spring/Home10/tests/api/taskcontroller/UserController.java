@@ -1,9 +1,12 @@
 package Spring.Home10.tests.api.taskcontroller;
 
-import Spring.Home10.tests.api.services.TaskService;
-import Spring.Home10.tests.model.task.Task;
+import Spring.Home10.tests.api.services.UserService;
 import Spring.Home10.tests.model.modelresponse.TaskResponse;
+import Spring.Home10.tests.model.modelresponse.UserResponse;
+import Spring.Home10.tests.model.task.Task;
+import Spring.Home10.tests.model.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,37 +14,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/task")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
-public class TaskController {
-    private final TaskService service;
+public class UserController {
 
+    @Autowired
+    private  final  UserService service;
     @GetMapping("/")
-    public List<TaskResponse> getAllCustomers() {
+    public List<UserResponse> getAllCustomers() {
 
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
         return service.findById(id).map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TaskResponse> createTask(@RequestBody Task task){
-        return new ResponseEntity<>(service.save(task),HttpStatus.CREATED);
-    }
-
-    @PostMapping("/put/{task_id}/user_id/{user_id}")
-    public ResponseEntity<TaskResponse> putUser(@PathVariable("task_id") Long task_id,@PathVariable() Long user_id){
-        return new ResponseEntity<>(service.addUserToTask(task_id,user_id),HttpStatus.ACCEPTED);
+    public ResponseEntity<UserResponse> createTask(@RequestBody User user){
+        return new ResponseEntity<>(service.save(user),HttpStatus.CREATED);
     }
 
     @DeleteMapping("/del/{id}")
-    public ResponseEntity<TaskResponse> deleteById(@PathVariable Long id){
+    public ResponseEntity<UserResponse> deleteById(@PathVariable Long id){
         return service.deleteById(id).map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build());
     }
-
 }
