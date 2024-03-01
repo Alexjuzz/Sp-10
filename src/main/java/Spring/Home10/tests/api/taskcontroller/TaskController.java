@@ -3,6 +3,7 @@ package Spring.Home10.tests.api.taskcontroller;
 import Spring.Home10.tests.api.services.TaskService;
 import Spring.Home10.tests.model.task.Task;
 import Spring.Home10.tests.model.modelresponse.TaskResponse;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService service;
+    private final MeterRegistry registry;
 
     @GetMapping("/")
     public List<TaskResponse> getAllCustomers() {
-
+        registry.counter("Request_getAllTack").increment();
         return service.getAll();
     }
 
