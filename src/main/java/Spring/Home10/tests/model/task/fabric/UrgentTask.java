@@ -35,7 +35,11 @@ public class UrgentTask extends Task {
     private Status status;
     @PrePersist
     protected void onCreate() {
-       super.onCreate();
+        super.onCreate();
+
+        this.setDescription(super.getDescription());
+        date = LocalDate.now();
+        status = Status.NOT_STARTED;
     }
 
 
