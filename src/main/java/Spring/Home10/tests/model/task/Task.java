@@ -12,8 +12,9 @@ import java.util.List;
 
 @Entity
 @Data
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "t_task")
-public class Task {
+public  class Task  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,7 @@ public class Task {
     private Status status;
 
 
+
     @OneToMany(mappedBy = "task", cascade =  {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JsonManagedReference
     private List<User> userList = new ArrayList<>();
@@ -43,8 +45,20 @@ public class Task {
         return task;
     }
     @PrePersist
-    private void onCreate() {
+    protected void onCreate() {
         date = LocalDate.now();
         status = Status.NOT_STARTED;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", status=" + status +
+                ", userList=" + userList +
+                '}';
     }
 }

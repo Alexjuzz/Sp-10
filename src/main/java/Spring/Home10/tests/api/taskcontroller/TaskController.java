@@ -30,9 +30,9 @@ public class TaskController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<TaskResponse> createTask(@RequestBody Task task){
-        return new ResponseEntity<>(service.save(task),HttpStatus.CREATED);
+    @PostMapping("/create/{type_task}")
+    public ResponseEntity<TaskResponse> createTask(@PathVariable String type_task, @RequestBody Task task){
+        return new ResponseEntity<>(service.save(type_task,task),HttpStatus.CREATED);
     }
 
     @PostMapping("/put/{task_id}/user_id/{user_id}")
